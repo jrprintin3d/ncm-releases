@@ -625,6 +625,47 @@ async function forceNightMode() {
     alert(translations[siteLanguage].errorForceNightmode +": " + errorMessage.message);
   }
 }
+async function updateLayout() {
+  var layout = document.getElementById(ids.clockLayout).value;
+  var formData = {
+      layout: layout
+  };
+  console.log("Layout Data:", formData);
+
+  var params = new URLSearchParams(formData).toString();
+  try {
+      const response = await fetch("/updateLayout", {
+          method: "POST",
+          headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: params,
+      });
+
+      if (!response.ok) {
+          if (response.status === 404) {
+              let errorMessage = await response.json();
+              alert(
+                  "Fehler beim Aktualisieren des Layouts: " +
+                  errorMessage.message
+              );
+          } else {
+              throw new Error("Fehlerhafte Antwort vom Server");
+          }
+      } else {
+          const data = await response.text();
+          console.log("Antwort vom Server:", data);
+          alert('Layout erfolgreich aktualisiert, Gerät wird neu gestartet.');
+          // Warten Sie auf die Bestätigung und dann ESP neustarten
+          window.location.href = "/restartESP";
+      }
+  } catch (error) {
+      console.error("Fehler:", error);
+      alert(
+          "Fehler beim Aktualisieren des Layouts. Bitte versuchen Sie es erneut."
+      );
+  }
+}
 
 async function factoryReset() {
   try {
