@@ -1,5 +1,7 @@
 {
     "de": {
+        "v1.0.0": "Release Version 1.0.0",
+        "v0.9.1": "Bugfix für Layout DE_V0.2",
         "v0.9.0": "Verbesserungen bei der Weboberfläche, Updateprozess, Startverhalten, Bugfixes",
         "v0.8.3": "Release Notes werden für neue Versionen angezeigt, Verbesserungen beim Updatevorgang, Nachtmodus, Optimierung bei mehreren Uhren im gleichen WLAN",
         "v0.8.2": "Uhrzeit lässt sich auf der Weboberfläche einstellen, Verbesserungen in der Wifi Stabilität",
@@ -7,6 +9,8 @@
         "v0.8.0": "Erstes Release mit Basis-Funktionalität"
     },
     "en": {
+        "v1.0.0": "Release Version 1.0.0",
+        "v0.9.1": "Bugfix for layout DE_V0.2",
         "v0.9.0": "Improvements to the web interface, update process, start behaviour, bug fixes",
         "v0.8.3": "Release notes are displayed for new versions, improvements to the update process, night mode, optimisation for multiple clocks in the same WLAN",
         "v0.8.2": "Time can be set on the web interface, improvements in wifi stability",

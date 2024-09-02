@@ -91,33 +91,33 @@ const ids = {
 
 
   //Popuptext Labels
-errorUpdateSettings: "errorUpdateSettings",
-noUpdateAvailable: "noUpdateAvailable",
-errorUpdateWifiSettings: "errorUpdateWifiSettings",
-restartDeviceTextAfterUpdateSettings: "restartDeviceTextAfterUpdateSettings",
-restartDeviceTextAfterResetSettings: "restartDeviceTextAfterResetSettings",
-errorUpdateTimeSettings: "errorUpdateTimeSettings",
-errorMessageGeneral: "errorMessageGeneral",
-errorUpdateLEDSettings: "errorUpdateLEDSettings",
-errorUpdateNightLEDSettings: "errorUpdateNightLEDSettings",
-errorForceNightmode: "errorForceNightmode",
-errorResetSettings: "errorResetSettings",
-errorSearchUpdate: "errorSearchUpdate",
-errorNoReleasesNotesAvailable: "errorNoReleasesNotesAvailable", 
-errorLoadingReleaseNotes: "errorLoadingReleaseNotes",
-startUpdateConfirmTitle: "startUpdateConfirmTitle",
-startUpdateConfirmText: "startUpdateConfirmText",
-startUpdateConfirmButton: "startUpdateConfirmButton",
-startUpdateCancelButton: "startUpdateCancelButton",
-startUpdateErrorStart: "startUpdateErrorStart",
-startUpdateServerError: "startUpdateServerError",
-startUpdateUpdateFailed: "startUpdateUpdateFailed",
-startUpdateUpdateCancelled: "startUpdateUpdateCancelled",
-startUpdateSuccess: "startUpdateSuccess"
+  errorUpdateSettings: "errorUpdateSettings",
+  noUpdateAvailable: "noUpdateAvailable",
+  errorUpdateWifiSettings: "errorUpdateWifiSettings",
+  restartDeviceTextAfterUpdateSettings: "restartDeviceTextAfterUpdateSettings",
+  restartDeviceTextAfterResetSettings: "restartDeviceTextAfterResetSettings",
+  errorUpdateTimeSettings: "errorUpdateTimeSettings",
+  errorMessageGeneral: "errorMessageGeneral",
+  errorUpdateLEDSettings: "errorUpdateLEDSettings",
+  errorUpdateNightLEDSettings: "errorUpdateNightLEDSettings",
+  errorForceNightmode: "errorForceNightmode",
+  errorResetSettings: "errorResetSettings",
+  errorSearchUpdate: "errorSearchUpdate",
+  errorNoReleasesNotesAvailable: "errorNoReleasesNotesAvailable",
+  errorLoadingReleaseNotes: "errorLoadingReleaseNotes",
+  startUpdateConfirmTitle: "startUpdateConfirmTitle",
+  startUpdateConfirmText: "startUpdateConfirmText",
+  startUpdateConfirmButton: "startUpdateConfirmButton",
+  startUpdateCancelButton: "startUpdateCancelButton",
+  startUpdateErrorStart: "startUpdateErrorStart",
+  startUpdateServerError: "startUpdateServerError",
+  startUpdateUpdateFailed: "startUpdateUpdateFailed",
+  startUpdateUpdateCancelled: "startUpdateUpdateCancelled",
+  startUpdateSuccess: "startUpdateSuccess"
 };
 
 const translations = {};
-var siteLanguage={};
+var siteLanguage = {};
 
 // Variablen deklarieren
 let timeUpdateInterval;
@@ -191,7 +191,7 @@ function applyTranslations(language) {
     console.error('Translations for language not found:', language);
     return;
   }
-  siteLanguage=language;
+  siteLanguage = language;
   document.getElementById(ids.settingsTitle).textContent = translations[language].settingsTitle;
   document.getElementById(ids.apModeText).innerHTML = translations[language].apModeText;
   document.getElementById(ids.wifiSettings).textContent = translations[language].wifiSettings;
@@ -247,13 +247,13 @@ function applyTranslations(language) {
 
 document.getElementById(ids.languageSelect).addEventListener('change', () => {
   changeLanguage();
-  updateLanguageSettings(); 
+  updateLanguageSettings();
 });
 
 function changeLanguage() {
   var selectedLanguage = document.getElementById(ids.languageSelect).value;
   console.log('Language selected: ', selectedLanguage);
-  applyTranslations(selectedLanguage);  
+  applyTranslations(selectedLanguage);
   loadLocalReleaseNotes();
 }
 async function updateLanguageSettings() {
@@ -518,7 +518,7 @@ async function updateTimeSettings() {
       const data = await response.text();
     }
   } catch (error) {
-    alert(translations[siteLanguage].errorUpdateTimeSettings );
+    alert(translations[siteLanguage].errorUpdateTimeSettings);
     console.error("Error:", error);
   }
 }
@@ -588,7 +588,7 @@ async function updateNightLEDSettings() {
     if (!response.ok) {
       if (response.status === 404) {
         const errorMessage = await response.json();
-        alert(translations[siteLanguage].errorUpdateNightLEDSettings +": " + errorMessage.message);
+        alert(translations[siteLanguage].errorUpdateNightLEDSettings + ": " + errorMessage.message);
       } else {
         throw new Error("Incorrect response from the server");
       }
@@ -597,7 +597,7 @@ async function updateNightLEDSettings() {
     }
   } catch (error) {
     console.error("Error: ", error);
-    alert(translations[siteLanguage].errorUpdateNightLEDSettings +": " + errorMessage.message);
+    alert(translations[siteLanguage].errorUpdateNightLEDSettings + ": " + errorMessage.message);
   }
 }
 
@@ -613,7 +613,7 @@ async function forceNightMode() {
     if (!response.ok) {
       if (response.status === 404) {
         const errorMessage = await response.json();
-        alert(translations[siteLanguage].errorForceNightmode +": " + errorMessage.message);
+        alert(translations[siteLanguage].errorForceNightmode + ": " + errorMessage.message);
       } else {
         throw new Error("Incorrect response from the server");
       }
@@ -622,48 +622,48 @@ async function forceNightMode() {
     }
   } catch (error) {
     console.error("Error: ", error);
-    alert(translations[siteLanguage].errorForceNightmode +": " + errorMessage.message);
+    alert(translations[siteLanguage].errorForceNightmode + ": " + errorMessage.message);
   }
 }
 async function updateLayout() {
   var layout = document.getElementById(ids.clockLayout).value;
   var formData = {
-      layout: layout
+    layout: layout
   };
   console.log("Layout Data:", formData);
 
   var params = new URLSearchParams(formData).toString();
   try {
-      const response = await fetch("/updateLayout", {
-          method: "POST",
-          headers: {
-              "Content-Type": "application/x-www-form-urlencoded",
-          },
-          body: params,
-      });
+    const response = await fetch("/updateLayout", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: params,
+    });
 
-      if (!response.ok) {
-          if (response.status === 404) {
-              let errorMessage = await response.json();
-              alert(
-                  "Fehler beim Aktualisieren des Layouts: " +
-                  errorMessage.message
-              );
-          } else {
-              throw new Error("Fehlerhafte Antwort vom Server");
-          }
+    if (!response.ok) {
+      if (response.status === 404) {
+        let errorMessage = await response.json();
+        alert(
+          "Fehler beim Aktualisieren des Layouts: " +
+          errorMessage.message
+        );
       } else {
-          const data = await response.text();
-          console.log("Antwort vom Server:", data);
-          alert('Layout erfolgreich aktualisiert, Gerät wird neu gestartet.');
-          // Warten Sie auf die Bestätigung und dann ESP neustarten
-          window.location.href = "/restartESP";
+        throw new Error("Fehlerhafte Antwort vom Server");
       }
+    } else {
+      const data = await response.text();
+      console.log("Antwort vom Server:", data);
+      alert('Layout erfolgreich aktualisiert, Gerät wird neu gestartet.');
+      // Warten Sie auf die Bestätigung und dann ESP neustarten
+      window.location.href = "/restartESP";
+    }
   } catch (error) {
-      console.error("Fehler:", error);
-      alert(
-          "Fehler beim Aktualisieren des Layouts. Bitte versuchen Sie es erneut."
-      );
+    console.error("Fehler:", error);
+    alert(
+      "Fehler beim Aktualisieren des Layouts. Bitte versuchen Sie es erneut."
+    );
   }
 }
 
@@ -678,7 +678,7 @@ async function factoryReset() {
 
     if (!response.ok) {
       const errorMessage = await response.text();
-      alert(translations[siteLanguage].errorResetSettings + ": "+ errorMessage);
+      alert(translations[siteLanguage].errorResetSettings + ": " + errorMessage);
     } else {
       const data = await response.text();
       alert(translations[siteLanguage].restartDeviceTextAfterResetSettings);
@@ -686,7 +686,7 @@ async function factoryReset() {
     }
   } catch (error) {
     console.error("Error:", error);
-    alert(translations[siteLanguage].errorResetSettings + ": "+ errorMessage);
+    alert(translations[siteLanguage].errorResetSettings + ": " + errorMessage);
   }
 }
 
@@ -831,7 +831,7 @@ async function startUpdate() {
           disableForm(false);
         })
         .catch(error => {
-          Swal.fire(translations[siteLanguage].startUpdate.error,translations[siteLanguage].startUpdate.updateFailed, "error");
+          Swal.fire(translations[siteLanguage].startUpdate.error, translations[siteLanguage].startUpdate.updateFailed, "error");
           console.error("Error:", error);
           hideOverlay();
           disableForm(false);

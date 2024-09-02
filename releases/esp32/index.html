@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Feature-Policy" content="clipboard-write 'self';">
     <meta charset="UTF-8">
-    <title id="settingsTitle">NiftyChronoMaster Settings</title>
+    <title id="settingsTitle">NiftyChrono Settings</title>
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
@@ -17,10 +17,17 @@
 
 <body>
     <form id="settingsForm">
-        <h1 id="settingsTitle">NiftyChronoMaster Settings</h1>
-        
+        <h1 id="settingsTitle">NiftyChrono Settings</h1>
+
         <div id="ap-mode-text" style="display:none;">
-            <p id="apModeText">Sie befinden sich derzeit im Access Point Modus (Offline).<br><br>Sie können Ihre WLAN-Einstellungen konfigurieren, um das Gerät mit einem Netzwerk zu verbinden. Sobald die Uhr mit dem Internet verbunden ist, kann die Zeit regelmäßig über NTP-Updates (Network Time Protocol) aktualisiert werden, was die Genauigkeit der angezeigten Uhrzeit erhöht.<br><br>Zudem kann die Uhr über das Internet Updates auf neuere Versionen mit zusätzlichen Funktionen erhalten.<br><br>Hinweis: Die Farbeinstellungen und die Helligkeit der LEDs können auch ohne aktive Internetverbindung angepasst werden.<br><br><b>Wichtig:</b> Wenn keine Internetverbindung vorhanden ist, läuft die Uhrzeit mit den unten eingestellten Werten weiter. Dies kann jedoch zu Ungenauigkeiten führen.<br><br></p>
+            <p id="apModeText">Sie befinden sich derzeit im Access Point Modus (Offline).<br><br>Sie können Ihre
+                WLAN-Einstellungen konfigurieren, um das Gerät mit einem Netzwerk zu verbinden. Sobald die Uhr mit dem
+                Internet verbunden ist, kann die Zeit regelmäßig über NTP-Updates (Network Time Protocol) aktualisiert
+                werden, was die Genauigkeit der angezeigten Uhrzeit erhöht.<br><br>Zudem kann die Uhr über das Internet
+                Updates auf neuere Versionen mit zusätzlichen Funktionen erhalten.<br><br>Hinweis: Die Farbeinstellungen
+                und die Helligkeit der LEDs können auch ohne aktive Internetverbindung angepasst
+                werden.<br><br><b>Wichtig:</b> Wenn keine Internetverbindung vorhanden ist, läuft die Uhrzeit mit den
+                unten eingestellten Werten weiter. Dies kann jedoch zu Ungenauigkeiten führen.<br><br></p>
         </div>
         <div class="section">
             <div class="section-header" id="wifiSettings">WLAN-Einstellungen</div>
@@ -33,8 +40,12 @@
             </div>
 
             <div class="flex-container">
-                <label for="apModeTimeout" id="apModeTimeoutLabel">AP Mode Timeout nach Einschalten der Uhr, bei "0" und "nur AccesPoint aktiv" ist der AP permanent aktiv. (Eingabe von 0-20 Minuten) Bei deaktiviertem AP Only Mode wird der AccessPoint für 5 Minuten aktiviert, wenn keine WLAN-Verbindung aufgebaut werden kann.:</label>
-                <input type="number" id="apModeTimeout" name="apModeTimeout" class="time-input" min="0" max="20" step="1">
+                <label for="apModeTimeout" id="apModeTimeoutLabel">AP Mode Timeout nach Einschalten der Uhr, bei "0" und
+                    "nur AccesPoint aktiv" ist der AP permanent aktiv. (Eingabe von 0-20 Minuten) Bei deaktiviertem AP
+                    Only Mode wird der AccessPoint für 15 Minuten aktiviert, wenn keine WLAN-Verbindung aufgebaut werden
+                    kann.:</label>
+                <input type="number" id="apModeTimeout" name="apModeTimeout" class="time-input" min="0" max="20"
+                    step="1">
             </div>
             <div class="flex-container">
                 <label for="ssid" id="ssidLabel">SSID:</label>
@@ -54,25 +65,32 @@
             <div class="section-header" id="timeSettings">Zeiteinstellungen</div>
             <div class="flex-container">
                 <label for="currentDate" id="currentDateLabel">Aktuelles Datum:</label>
-                <input type="date" id="currentDate" name="currentDate" onfocus="pauseTimeUpdate()" onblur="resumeTimeUpdate()" onchange="updateTimeSettings()" class="time-input">
+                <input type="date" id="currentDate" name="currentDate" onfocus="pauseTimeUpdate()"
+                    onblur="resumeTimeUpdate()" onchange="updateTimeSettings()" class="time-input">
             </div>
 
             <div class="flex-container">
                 <label for="currentTime" id="currentTimeLabel">Aktuelle Uhrzeit:</label>
-                <input type="time" id="currentTime" name="currentTime" onfocus="pauseTimeUpdate()" onblur="resumeTimeUpdate()" onchange="updateTimeSettings()" class="time-input">
+                <input type="time" id="currentTime" name="currentTime" onfocus="pauseTimeUpdate()"
+                    onblur="resumeTimeUpdate()" onchange="updateTimeSettings()" class="time-input">
             </div>
 
             <div class="flex-container">
                 <label for="timeZone" id="timeZoneLabel">Zeitzone (Stunden vom UTC):</label>
-                <input type="number" id="timeZone" name="timeZone" min="-12" max="14" step="1" onchange="updateTimeSettings()" class="time-input">
+                <input type="number" id="timeZone" name="timeZone" min="-12" max="14" step="1"
+                    onchange="updateTimeSettings()" class="time-input">
             </div>
             <div class="flex-container">
                 <label for="ntpUpdatesEnabled" id="ntpUpdatesEnabledLabel">NTP-Updates aktivieren:</label>
                 <label class="switch">
-                    <input type="checkbox" id="ntpUpdatesEnabled" name="ntpUpdatesEnabled" onchange="updateTimeSettings()">
+                    <input type="checkbox" id="ntpUpdatesEnabled" name="ntpUpdatesEnabled"
+                        onchange="updateTimeSettings()">
                     <span id="ntpUpdatesEnabledCheckbox" class="slider" style="display:block"></span>
                 </label>
-                <span id="ntpWarning" style="display:none; color:red;"><p id="ntpWarningText">Diese Funktion benötigt eine WLAN-Verbindung</p></Diese></span>
+                <span id="ntpWarning" style="display:none; color:red;">
+                    <p id="ntpWarningText">Diese Funktion benötigt eine WLAN-Verbindung</p>
+                    </Diese>
+                </span>
             </div>
             <div class="flex-container">
                 <label for="useDreiviertel" id="useDreiviertelLabel">Anzeige-Modus:</label>
@@ -91,10 +109,11 @@
             <div class="flex-container">
                 <label for="clockLayout" id="clockLayoutLabel">Layout:</label>
                 <select id="clockLayout" name="clockLayout" onchange="updateLayout()" class="time-input">
-                    <option value="0">DE-V0.1_Prototyp</option> <!-- DE_V0_1 SMALL -->
-                    <option value="1">DE-V0.2_Prototyp</option> <!-- DE_V0_2_ StandardLED + MINUTE -->
-                    <option value="2">DE-V0.3_Prototyp</option> <!-- DE_V0_3_PROTOTYPE StandardLED-->
+                    <option value="0">DE-V0.1_Prototype</option> <!-- DE_V0_1 SMALL -->
+                    <option value="1">DE-V0.2_Prototype</option> <!-- DE_V0_2_ StandardLED + MINUTE -->
+                    <option value="2">DE-V0.3_Prototype</option> <!-- DE_V0_3_PROTOTYPE StandardLED-->
                     <option value="3">DE-V1.0</option> <!-- DE_V1_0 Flex -->
+                    <option value="4">EN-V1.0</option> <!-- EN_V1_0 Flex -->
                 </select>
             </div>
         </div>
@@ -103,7 +122,8 @@
             <div class="section-header" id="ledSettings">LED-Einstellungen</div>
             <div class="flex-container">
                 <label for="brightness" id="brightnessLabel">Helligkeit:</label>
-                <input type="range" id="brightness" name="brightness" min="10" max="100" required onchange="updateLEDSettings()">
+                <input type="range" id="brightness" name="brightness" min="10" max="100" required
+                    onchange="updateLEDSettings()">
             </div>
             <div class="flex-container">
                 <label for="red" id="redLabel">Rot:</label>
@@ -129,30 +149,37 @@
             </div>
             <div class="flex-container">
                 <label for="nightmodeStart" id="nightmodeStartLabel">Nachtmodus aktivieren um:</label>
-                <input type="time" id="nightmodeStart" name="nightmodeStart" onchange="updateNightLEDSettings()" class="time-input">
+                <input type="time" id="nightmodeStart" name="nightmodeStart" onchange="updateNightLEDSettings()"
+                    class="time-input">
             </div>
             <div class="flex-container">
                 <label for="nightmodeEnd" id="nightmodeEndLabel">Nachtmodus deaktivieren um:</label>
-                <input type="time" id="nightmodeEnd" name="nightmodeEnd" onchange="updateNightLEDSettings()" class="time-input">
+                <input type="time" id="nightmodeEnd" name="nightmodeEnd" onchange="updateNightLEDSettings()"
+                    class="time-input">
             </div>
             <div class="flex-container">
                 <label for="nightBrightness" id="nightBrightnessLabel">Helligkeit:</label>
-                <input type="range" id="nightBrightness" name="nightBrightness" min="10" max="100" required onchange="updateNightLEDSettings()">
+                <input type="range" id="nightBrightness" name="nightBrightness" min="10" max="100" required
+                    onchange="updateNightLEDSettings()">
             </div>
             <div class="flex-container">
                 <label for="nightRed" id="nightRedLabel">Rot:</label>
-                <input type="range" id="nightRed" name="nightRed" min="0" max="255" required onchange="updateNightLEDSettings()">
+                <input type="range" id="nightRed" name="nightRed" min="0" max="255" required
+                    onchange="updateNightLEDSettings()">
             </div>
             <div class="flex-container">
                 <label for="nightGreen" id="nightGreenLabel">Grün:</label>
-                <input type="range" id="nightGreen" name="nightGreen" min="0" max="255" required onchange="updateNightLEDSettings()">
+                <input type="range" id="nightGreen" name="nightGreen" min="0" max="255" required
+                    onchange="updateNightLEDSettings()">
             </div>
             <div class="flex-container">
                 <label for="nightBlue" id="nightBlueLabel">Blau:</label>
-                <input type="range" id="nightBlue" name="nightBlue" min="0" max="255" required onchange="updateNightLEDSettings()">
+                <input type="range" id="nightBlue" name="nightBlue" min="0" max="255" required
+                    onchange="updateNightLEDSettings()">
             </div>
             <div class="flex-container">
-                <label for="forceNightModeButton" id="forceNightModeButtonLabel">Zeige für 10 Sekunden die Uhrzeit mit deinen eingestellten Werten für den Nachtmodus an:</label>
+                <label for="forceNightModeButton" id="forceNightModeButtonLabel">Zeige für 10 Sekunden die Uhrzeit mit
+                    deinen eingestellten Werten für den Nachtmodus an:</label>
                 <input id="forceNightModeButton" type="button" value="Nachtmodus erzwingen" onclick="forceNightMode()">
             </div>
         </div>
@@ -164,25 +191,31 @@
         <div class="section" id="update-section">
             <div class="section-header" id="updateSection">Update-Verwaltung</div>
             <div class="flex-container">
-                <label id="currentVersionBadgeLabel" for="currentVersionBadge">Deine Softwareversion:</label> 
+                <label id="currentVersionBadgeLabel" for="currentVersionBadge">Deine Softwareversion:</label>
                 <label id="currentVersionBadge" name="currentVersionBadge" class="badge">unknown</label>
-                <label id="buildDateBadgeLabel" for="buildDateBadge">Builddate:</label>  
+                <label id="buildDateBadgeLabel" for="buildDateBadge">Builddate:</label>
                 <label id="buildDateBadge" name="buildDateBadge" class="badge">unknown</label>
-                <input id="searchUpdateButton" type="button" value="Nach Update suchen" style="display:block;" onclick="checkForUpdate()">
-                <span id="updateButtonAPTextWarning" style="display:none; color:red;">Diese Funktion benötigt eine WLAN-Verbindung</span>
+                <input id="searchUpdateButton" type="button" value="Nach Update suchen" style="display:block;"
+                    onclick="checkForUpdate()">
+                <span id="updateButtonAPTextWarning" style="display:none; color:red;">Diese Funktion benötigt eine
+                    WLAN-Verbindung</span>
             </div>
 
             <div class="flex-container">
-                <label id="availableVersionsBadgeLabel" style="display:none;" for="availableVersions">Verfügbare Versionen:</label>
-                <select style="display:none;" id="availableVersions" name="availableVersions" onchange="displayReleaseNotes()"></select>
+                <label id="availableVersionsBadgeLabel" style="display:none;" for="availableVersions">Verfügbare
+                    Versionen:</label>
+                <select style="display:none;" id="availableVersions" name="availableVersions"
+                    onchange="displayReleaseNotes()"></select>
             </div>
 
             <div class="flex-container">
-                <input id="updateButton" type="button" style="display:none;" value="Update starten" onclick="startUpdate()">
+                <input id="updateButton" type="button" style="display:none;" value="Update starten"
+                    onclick="startUpdate()">
             </div>
 
             <div>
-                <label id="releaseNotesNewLabel" for="releaseNotesNew" style="display:none;">Release Notes neue Version:</label>
+                <label id="releaseNotesNewLabel" for="releaseNotesNew" style="display:none;">Release Notes neue
+                    Version:</label>
                 <div id="releaseNotesNew"></div>
             </div>
 
@@ -193,13 +226,18 @@
             </div>
         </div>
         <div class="footer">
-            <label for="factoryResetButton" id="factoryResetButtonLabel">Du kannst mit einem Klick alle Einstellungen und Parameter auf Werkseinstellungen zurücksetzen.</label>
-            <input id="factoryResetButton" type="button" value="Auf Werkseinstellungen zurücksetzen" onclick="factoryReset()">
+            <label for="factoryResetButton" id="factoryResetButtonLabel">Du kannst mit einem Klick alle Einstellungen
+                und Parameter auf Werkseinstellungen zurücksetzen.</label>
+            <input id="factoryResetButton" type="button" value="Auf Werkseinstellungen zurücksetzen"
+                onclick="factoryReset()">
             <br>
             <br>
 
             <p class="copyright" id="copyright">Copyright by JR-Projects</p>
             <p><a href="https://www.jrprojects.de" id="websiteLink">www.jrprojects.de</a></p>
+            <br>
+            <p><a href="https://www.jrprojects.de/de/wordclock" id="websiteLink">Infos zur NiftyChrono</a></p>
+            <br>
         </div>
         <div class="centered-container">
             <label for="languageSelect" id="languageSelectLabel">Sprache:</label>
