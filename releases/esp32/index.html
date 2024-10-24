@@ -186,7 +186,13 @@
 
         <div id="overlay" class="overlay">
             <div class="loader"></div>
+            <!-- Fortschrittsbalken innerhalb des Overlays -->
+            <div id="progressContainer">
+                <span id="progressValue">0</span>
+                <div id="progressBar" style="width: 0%; display: none;"></div>
+            </div>
         </div>
+        
 
         <div class="section" id="update-section">
             <div class="section-header" id="updateSection">Update-Verwaltung</div>
@@ -234,6 +240,7 @@
             <br>
 
             <p class="copyright" id="copyright">Copyright by JR-Projects</p>
+            <br>
             <p><a href="https://www.jrprojects.de" id="websiteLink">www.jrprojects.de</a></p>
             <br>
             <p><a href="https://www.jrprojects.de/de/wordclock" id="websiteLink">Infos zur NiftyChrono</a></p>

@@ -696,21 +696,6 @@ function updateProgress(percent) {
   bar.style.display = "block";
 }
 
-function completeUpdate() {
-  updateProgress(100);
-  setTimeout(() => {
-    document.getElementById(ids.progressBar).style.display = "none";
-    updateProgress(0);
-  }, 2000);
-}
-
-function showOverlay() {
-  document.getElementById(ids.overlay).style.display = "block";
-}
-
-function hideOverlay() {
-  document.getElementById(ids.overlay).style.display = "none";
-}
 
 async function loadLocalReleaseNotes() {
   try {
@@ -795,12 +780,58 @@ async function displayReleaseNotes() {
     });
 }
 
+
+function fetchUpdateProgress() {
+  console.log("Fetching update progress...");
+  fetch('/getUpdateProgress') // Endpunkt zum Abrufen des Fortschritts vom Server
+    .then(response => {
+      console.log("Response received", response);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log("Progress data:", data);
+      if (data.progress !== undefined) {
+        updateProgressPopup(data.progress); // Aktualisiert den Fortschritt im Popup
+        if (data.progress >= 100) {
+          Swal.close(); // Schließt das Popup, wenn das Update abgeschlossen ist
+          Swal.fire('Update abgeschlossen', 'Das Update wurde erfolgreich durchgeführt!', 'success');
+        }
+      } else {
+        console.error('Unerwartetes Fortschrittsdatenformat:', data);
+      }
+    })
+    .catch(error => console.error('Fehler beim Abrufen des Update-Fortschritts:', error));
+}
+
+// Funktion zum Aktualisieren des Fortschritts im Popup
+function updateProgressPopup(percent) {
+  Swal.fire({
+    title: 'Update-Fortschritt',
+    text: `Fortschritt: ${percent.toFixed(2)}%`,
+    icon: 'info',
+    showConfirmButton: false,
+    timer: 1000
+  });
+}
+
+
+// Setzt einen Intervall, um den Fortschritt regelmäßig abzufragen
+function startProgressCheck() {
+  setInterval(fetchUpdateProgress, 1000); // Alle 1 Sekunde den Fortschritt abrufen
+}
+
+
 async function startUpdate() {
   const updateButton = document.getElementById(ids.updateButton);
-  updateButton.disabled = true;
-  disableForm(true);
-  showOverlay();
-  const selectedVersion = document.getElementById(ids.availableVersions).value;
+  updateButton.disabled = true; // Deaktiviere den Update-Button, um doppelte Klicks zu verhindern
+  disableForm(true); // Deaktiviert die gesamte Form, während das Update läuft
+  showOverlay(); // Zeigt das Overlay während des Updates an
+
+  const selectedVersion = document.getElementById(ids.availableVersions).value; // Holt die ausgewählte Version
+
   Swal.fire({
     title: translations[siteLanguage].startUpdate.confirmTitle,
     text: translations[siteLanguage].startUpdate.confirmText,
@@ -812,37 +843,107 @@ async function startUpdate() {
     cancelButtonText: translations[siteLanguage].startUpdate.cancelButton,
   }).then((result) => {
     if (result.isConfirmed) {
+      // Startet den Update-Vorgang, wenn bestätigt
       fetch("/startUpdate?version=" + encodeURIComponent(selectedVersion))
-        .then(response => {
+        .then((response) => {
           if (!response.ok) {
+            console.log("Antwort ist nicht OK, Status:", response.status);
             if (response.status === 404) {
-              return response.json().then(errorMessage => {
-                Swal.fire(translations[siteLanguage].startUpdate.error, translations[siteLanguage].startUpdate.errorStart + errorMessage.message, "error");
+              return response.json().then((errorMessage) => {
+                Swal.fire(
+                  translations[siteLanguage].startUpdate.error,
+                  translations[siteLanguage].startUpdate.errorStart + errorMessage.message,
+                  "error"
+                );
+                console.error("Fehler: ", errorMessage.message);
                 throw new Error(errorMessage.message);
               });
             } else {
+              console.error("Serverfehler: Status " + response.status);
               throw new Error(translations[siteLanguage].startUpdate.serverError);
             }
           }
-          return response.text();
+          return response.json();
         })
-        .then(data => {
-          Swal.fire(translations[siteLanguage].startUpdate.success, data, "success");
-          disableForm(false);
+        .then((data) => {
+          console.log("Server-Antwort-Daten:", data);
+
+          // Starte die Fortschrittsüberprüfung, wenn das Update erfolgreich gestartet wurde
+          if (data) {
+            startProgressCheck(); // Beginne die Fortschrittsabfrage
+            showProgressPopup();  // Zeige ein Popup an, um den Fortschritt zu überwachen
+          }
+
         })
-        .catch(error => {
-          Swal.fire(translations[siteLanguage].startUpdate.error, translations[siteLanguage].startUpdate.updateFailed, "error");
-          console.error("Error:", error);
+        .catch((error) => {
+          console.error("Fehler beim Starten des Updates:", error);
+          Swal.fire(
+            translations[siteLanguage].startUpdate.error,
+            translations[siteLanguage].startUpdate.updateFailed,
+            "error"
+          );
           hideOverlay();
           disableForm(false);
+          completeUpdate();
         });
     } else if (result.dismiss === Swal.DismissReason.cancel) {
-      Swal.fire("Abgebrochen", translations[siteLanguage].startUpdatepdateCancelled, "error");
+      // Abbruch des Updates durch den Benutzer
+      Swal.fire("Abgebrochen", translations[siteLanguage].startUpdate.updateCancelled, "error");
       hideOverlay();
       disableForm(false);
     }
   });
 }
+
+function showProgressPopup() {
+  Swal.fire({
+    title: 'Update läuft...',
+    html: '<b>Fortschritt: <span id="progressValue">0</span>%</b>',
+    allowOutsideClick: false,
+    showConfirmButton: false,
+    willOpen: () => {
+      Swal.showLoading();
+    },
+  });
+
+  // Aktualisiert den Fortschritt regelmäßig
+  const progressInterval = setInterval(() => {
+    fetchUpdateProgress();
+  }, 1000);
+
+  // Stoppt die Fortschrittsaktualisierung, wenn das Update beendet ist
+  function stopProgressCheck() {
+    clearInterval(progressInterval);
+  }
+
+  // Überwacht, ob das Popup geschlossen wurde
+  Swal.getPopup().addEventListener('close', stopProgressCheck);
+}
+
+function showOverlay() {
+  document.getElementById(ids.overlay).style.display = "block"; // Nur das Overlay anzeigen
+  document.getElementById('progressBar').style.display = 'none'; // Fortschrittsbalken standardmäßig ausblenden
+  document.getElementById('progressContainer').style.display = 'none'; // Fortschrittsbalken-Container ausblenden
+}
+
+function hideOverlay() {
+  document.getElementById(ids.overlay).style.display = "none"; // Overlay ausblenden
+  document.getElementById('progressBar').style.display = 'none'; // Fortschrittsbalken ausblenden
+  document.getElementById('progressContainer').style.display = 'none'; // Fortschrittsbalken-Container ausblenden
+}
+
+
+function updateProgress(percent) {
+  const bar = document.getElementById(ids.progressBar);
+  if (bar) {
+    bar.style.width = percent + "%";
+    bar.style.display = "block"; // Fortschrittsbalken sichtbar machen
+  } else {
+    console.error("Fortschrittsbalken-Element nicht gefunden.");
+  }
+}
+
+
 
 function disableForm(disabled) {
   document.getElementById(ids.apModeOnly).disabled = disabled;
@@ -873,4 +974,13 @@ function disableForm(disabled) {
   document.getElementById(ids.availableVersions).disabled = disabled;
   document.getElementById(ids.availableVersionsBadgeLabel).disabled = disabled;
   document.getElementById(ids.factoryResetButton).disabled = disabled;
+}
+
+
+function completeUpdate() {
+  updateProgress(100);
+  setTimeout(() => {
+    document.getElementById(ids.progressBar).style.display = "none"; // Fortschrittsbalken ausblenden
+    updateProgress(0);
+  }, 2000);
 }

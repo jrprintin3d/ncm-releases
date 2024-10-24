@@ -318,3 +318,35 @@ input:checked + .slider:before {
   flex-direction: column;
   align-items: center;
 }
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7); /* Halbtransparenter Hintergrund */
+  z-index: 999; /* Eine niedrigere Ebene als das SweetAlert2-Popup */
+  display: none;
+}
+
+
+#progressContainer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* Zentriert den Fortschrittsbalken */
+  width: 80%;
+  background-color: #f3f3f3;
+  border: 1px solid #ddd;
+  margin-top: 10px;
+  padding: 5px;
+  z-index: 10000; /* Sicherstellen, dass der Fortschrittsbalken im Overlay sichtbar ist */
+}
+
+.progress-bar {
+  width: 0%;
+  height: 20px;
+  background-color: #4caf50; /* Grün für Fortschritt */
+  transition: width 0.4s ease; /* Weicher Übergang beim Erhöhen der Breite */
+}
