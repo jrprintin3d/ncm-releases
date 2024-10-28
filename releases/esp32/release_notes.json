@@ -1,6 +1,6 @@
 {
     "de": {
-        "v1.0.1": "Release Version 1.0.1, Bugfix für Updateprozess",
+        "v1.0.1": "Release Version 1.0.1, Bugfix für Updateprozess, bugfix Sommerzeit",
         "v1.0.0": "Release Version 1.0.0",
         "v0.9.1": "Bugfix für Layout DE_V0.2",
         "v0.9.0": "Verbesserungen bei der Weboberfläche, Updateprozess, Startverhalten, Bugfixes",
@@ -10,7 +10,7 @@
         "v0.8.0": "Erstes Release mit Basis-Funktionalität"
     },
     "en": {
-        "v1.0.1": "Release Version 1.0.1, Bugfix for Update process",
+        "v1.0.1": "Release Version 1.0.1, Bugfix for Update process, bugfix for summer time",
         "v1.0.0": "Release Version 1.0.0",
         "v0.9.1": "Bugfix for layout DE_V0.2",
         "v0.9.0": "Improvements to the web interface, update process, start behaviour, bug fixes",
