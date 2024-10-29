@@ -698,7 +698,7 @@ async function loadLocalReleaseNotes() {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     const data = await response.json();
-    const currentVersion = document.getElementById(ids.currentVersionBadge).textContent.split("-")[0];
+    const currentVersion = document.getElementById(ids.currentVersionBadge).textContent.trim();
     let notes = "";
     if (data[siteLanguage] && data[siteLanguage][currentVersion]) {
       notes = `<h4>${currentVersion}</h4><p>${data[siteLanguage][currentVersion]}</p>`;
@@ -707,7 +707,7 @@ async function loadLocalReleaseNotes() {
     }
     document.getElementById(ids.releaseNotesActual).innerHTML = notes;
   } catch (error) {
-    console.error("Error loading the release notes: ", error);
+    console.error("Error loading the actual release notes: ", error);
     document.getElementById(ids.releaseNotesActual).innerText = translations[siteLanguage].errorLoadingReleaseNotes;
   }
 }
