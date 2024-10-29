@@ -5,11 +5,11 @@
     "favicon-16x16.png": "6cfb6cf145aa7ac6c95b80032acec53deea9de160e9e287577f66a1bc99e513f",
     "favicon-32x32.png": "909d4e5a3a1723ecc34a39f82c727f2ed476318051a6666dff92446d1eac1732",
     "favicon.ico": "517d94648fc4607a1246fc31c89c3e470b6a6a5b27140fe4d357c2540ac2a2bf",
-    "firmware_esp32.bin": "c20df1fd256aee52a04fecfc641386ea20ada820a74b2b7e25e7bdb2e3a33ca4",
+    "firmware_esp32.bin": "932a632725a28fb4b7fd4bcad0dfb663160cc80cb28eb2caf93a057a23e68123",
     "index.html": "fca004d10af370947f5582e10f0f11833a7957486c94f127722ef60d05bf2b29",
-    "release_notes.json": "38d3260eaff0ef6fedbdba290c579b3521f969168e365696c93beaacd232b186",
+    "release_notes.json": "074a061c69927aa189ac099172c49953a0ec1b5d785ee17cfaa9d77513f01026",
     "scripts.js": "89036ce5c0e8fd5daa57fe5b4f8ad7290cc78ffa5f6349c491d7dc54c9e14555",
     "style.css": "40a8ca7c1600359440d98ead06a76da123ac8576857b79c6ceaadf20c5d46795",
     "translations.json": "938ece4e871300aff6e08adc4608d6265fe4d6ba44c0559c0876c37268138925",
-    "version.txt": "688de25e1482a1543834e8e389c20aac2fa34fd6abdb28138a00847c8d49f1a0"
+    "version.txt": "349638c59d94d5497f53b57165b90f37b6d73bf5afaa7a51f789a92544dcab1e"
 }

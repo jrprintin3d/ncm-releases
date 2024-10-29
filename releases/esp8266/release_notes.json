@@ -1,5 +1,6 @@
 {
     "de": {
+        "v1.0.6": "Release Version 1.0.6, Bugfix NTP Updateprozess",
         "v1.0.5": "Release Version 1.0.5, Bugfix NTP Updateprozess",
         "v1.0.4": "Release Version 1.0.4, Bugfix Fehler beim OTA Update",
         "v1.0.3": "Release Version 1.0.3, Bugfix Fehler beim Aktualisieren der Zeitzone",
@@ -16,6 +17,7 @@
         "0.0.0": "Test Release Version, nicht für die Produktivität verwendet"
     },
     "en": {
+        "v1.0.6": "Release Version 1.0.6, Bugfix NTP Update process",
         "v1.0.5": "Release Version 1.0.5, Bugfix NTP Update process",
         "v1.0.4": "Release Version 1.0.4, Bugfix for OTA update",
         "v1.0.3": "Release Version 1.0.3, Bugfix for time zone update",
