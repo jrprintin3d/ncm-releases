@@ -690,12 +690,6 @@ async function factoryReset() {
   }
 }
 
-function updateProgress(percent) {
-  const bar = document.getElementById(ids.progressBar);
-  bar.style.width = percent + "%";
-  bar.style.display = "block";
-}
-
 
 async function loadLocalReleaseNotes() {
   try {
@@ -780,56 +774,12 @@ async function displayReleaseNotes() {
     });
 }
 
-
-function fetchUpdateProgress() {
-  console.log("Fetching update progress...");
-  fetch('/getUpdateProgress') // Endpunkt zum Abrufen des Fortschritts vom Server
-    .then(response => {
-      console.log("Response received", response);
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      return response.json();
-    })
-    .then(data => {
-      console.log("Progress data:", data);
-      if (data.progress !== undefined) {
-        updateProgressPopup(data.progress); // Aktualisiert den Fortschritt im Popup
-        if (data.progress >= 100) {
-          Swal.close(); // Schließt das Popup, wenn das Update abgeschlossen ist
-          Swal.fire('Update abgeschlossen', 'Das Update wurde erfolgreich durchgeführt!', 'success');
-        }
-      } else {
-        console.error('Unerwartetes Fortschrittsdatenformat:', data);
-      }
-    })
-    .catch(error => console.error('Fehler beim Abrufen des Update-Fortschritts:', error));
-}
-
-// Funktion zum Aktualisieren des Fortschritts im Popup
-function updateProgressPopup(percent) {
-  Swal.fire({
-    title: 'Update-Fortschritt',
-    text: `Fortschritt: ${percent.toFixed(2)}%`,
-    icon: 'info',
-    showConfirmButton: false,
-    timer: 1000
-  });
-}
-
-
-// Setzt einen Intervall, um den Fortschritt regelmäßig abzufragen
-function startProgressCheck() {
-  setInterval(fetchUpdateProgress, 1000); // Alle 1 Sekunde den Fortschritt abrufen
-}
-
-
 async function startUpdate() {
   const updateButton = document.getElementById(ids.updateButton);
   updateButton.disabled = true; // Deaktiviere den Update-Button, um doppelte Klicks zu verhindern
   disableForm(true); // Deaktiviert die gesamte Form, während das Update läuft
   showOverlay(); // Zeigt das Overlay während des Updates an
-
+  pauseTimeUpdate(); // Anhalten das Zeit-Update
   const selectedVersion = document.getElementById(ids.availableVersions).value; // Holt die ausgewählte Version
 
   Swal.fire({
@@ -845,7 +795,7 @@ async function startUpdate() {
     if (result.isConfirmed) {
       // Startet den Update-Vorgang, wenn bestätigt
       fetch("/startUpdate?version=" + encodeURIComponent(selectedVersion))
-        .then((response) => {
+        .then(async (response) => {
           if (!response.ok) {
             console.log("Antwort ist nicht OK, Status:", response.status);
             if (response.status === 404) {
@@ -870,7 +820,6 @@ async function startUpdate() {
 
           // Starte die Fortschrittsüberprüfung, wenn das Update erfolgreich gestartet wurde
           if (data) {
-            startProgressCheck(); // Beginne die Fortschrittsabfrage
             showProgressPopup();  // Zeige ein Popup an, um den Fortschritt zu überwachen
           }
 
@@ -884,6 +833,7 @@ async function startUpdate() {
           );
           hideOverlay();
           disableForm(false);
+          pauseTimeUpdate();
           completeUpdate();
         });
     } else if (result.dismiss === Swal.DismissReason.cancel) {
@@ -891,33 +841,36 @@ async function startUpdate() {
       Swal.fire("Abgebrochen", translations[siteLanguage].startUpdate.updateCancelled, "error");
       hideOverlay();
       disableForm(false);
+      pauseTimeUpdate();
+      completeUpdate();
     }
   });
 }
 
 function showProgressPopup() {
+  const startTime = Date.now();
   Swal.fire({
     title: 'Update läuft...',
-    html: '<b>Fortschritt: <span id="progressValue">0</span>%</b>',
-    allowOutsideClick: false,
+    timer: 600000, // 600000 Millisekunden entspricht 10 Minuten
+    html: 'Der Vorgang kann bis zu 10 Minuten dauern. Bitte warten Sie, bis der Vorgang abgeschlossen ist und die Uhr neu gestartet wird. Seit dem Start des Updates vergangen: <b></b>',
     showConfirmButton: false,
-    willOpen: () => {
+    allowOutsideClick: false,
+    didOpen: () => {
       Swal.showLoading();
+      const timer = Swal.getPopup().querySelector("b");
+      const updateTimerText = () => {
+        const elapsed = (Date.now() - startTime) / 1000;
+        const minutes = Math.floor(elapsed / 60);
+        const seconds = Math.floor(elapsed % 60);
+        const progress = document.getElementById(ids.progressBar).textContent;
+        timer.textContent = `${minutes ? `${minutes} Minuten und ${seconds} Sekunden` : `${seconds} Sekunden`}`;
+      };
+      timerInterval = setInterval(updateTimerText, 100);
     },
+    willClose: () => {
+      clearInterval(timerInterval);
+    }
   });
-
-  // Aktualisiert den Fortschritt regelmäßig
-  const progressInterval = setInterval(() => {
-    fetchUpdateProgress();
-  }, 1000);
-
-  // Stoppt die Fortschrittsaktualisierung, wenn das Update beendet ist
-  function stopProgressCheck() {
-    clearInterval(progressInterval);
-  }
-
-  // Überwacht, ob das Popup geschlossen wurde
-  Swal.getPopup().addEventListener('close', stopProgressCheck);
 }
 
 function showOverlay() {
@@ -932,19 +885,32 @@ function hideOverlay() {
   document.getElementById('progressContainer').style.display = 'none'; // Fortschrittsbalken-Container ausblenden
 }
 
-
-function updateProgress(percent) {
-  const bar = document.getElementById(ids.progressBar);
-  if (bar) {
-    bar.style.width = percent + "%";
-    bar.style.display = "block"; // Fortschrittsbalken sichtbar machen
-  } else {
-    console.error("Fortschrittsbalken-Element nicht gefunden.");
+/**
+ * Updates the progress bar on the web page with the given progress value.
+ * Ensures the progress bar is visible and sets its width and text content 
+ * based on the provided progress percentage. Additionally, updates the progress 
+ * in a popup if applicable.
+ * 
+ * @param {number} progress - The progress value as a percentage (0 to 100).
+ */
+const updateProgressToWeb = (progress) => {
+  const progressBar = document.getElementById(ids.progressBar);
+  console.log("progress value: ", progress);
+  if (!progressBar) {
+    console.error("Progress bar elements are missing from the DOM.");
+    return;
+  }
+  progressBar.style.display = "block";
+  progressBar.style.width = `${progress}%`;
+  progressBar.textContent = `${progress.toFixed(2)}%`;
+  updateProgressInPopup(progress);
+};
+function updateProgressInPopup(progress) {
+  const progressText = document.getElementById("progress-text");
+  if (progressText) {
+    progressText.textContent = `${progress.toFixed(2)}%`;
   }
 }
-
-
-
 function disableForm(disabled) {
   document.getElementById(ids.apModeOnly).disabled = disabled;
   document.getElementById(ids.apModeTimeout).disabled = disabled;
@@ -978,9 +944,7 @@ function disableForm(disabled) {
 
 
 function completeUpdate() {
-  updateProgress(100);
   setTimeout(() => {
     document.getElementById(ids.progressBar).style.display = "none"; // Fortschrittsbalken ausblenden
-    updateProgress(0);
   }, 2000);
 }
